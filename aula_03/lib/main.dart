@@ -35,13 +35,23 @@ class _MyAppState extends State<MyApp> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              contagem++;
-            });
-          },
-          child: Icon(Icons.add),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: () {},
+              child: Icon(Icons.remove),
+            ),
+            SizedBox(width: 5),
+            FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  contagem++;
+                });
+              },
+              child: Icon(Icons.add),
+            ),
+          ],
         ),
       ),
     );
