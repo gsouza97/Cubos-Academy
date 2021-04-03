@@ -39,10 +39,16 @@ class _MyAppState extends State<MyApp> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  if (contagem > 0) {
+                    contagem--;
+                  }
+                });
+              },
               child: Icon(Icons.remove),
             ),
-            SizedBox(width: 5),
+            SizedBox(width: 10),
             FloatingActionButton(
               onPressed: () {
                 setState(() {
