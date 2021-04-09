@@ -1,3 +1,4 @@
+import 'package:aula_03/button.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,6 +12,20 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int contagem = 0;
+
+  void add() {
+    setState(() {
+      contagem++;
+    });
+  }
+
+  void sub() {
+    setState(() {
+      if (contagem > 0) {
+        contagem--;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,25 +53,9 @@ class _MyAppState extends State<MyApp> {
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  if (contagem > 0) {
-                    contagem--;
-                  }
-                });
-              },
-              child: Icon(Icons.remove),
-            ),
+            Botao((Icons.remove), sub),
             SizedBox(width: 10),
-            FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  contagem++;
-                });
-              },
-              child: Icon(Icons.add),
-            ),
+            Botao((Icons.add), add),
           ],
         ),
       ),
