@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class Botao extends StatelessWidget {
+class OperationFloatActionButton extends StatelessWidget {
   IconData icone;
   void Function() funcao;
 
-  Botao(
+  OperationFloatActionButton(
     this.icone,
     this.funcao,
   );
