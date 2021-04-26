@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon/circular-container-widget.dart';
 import 'package:pokemon/poke-controller.dart';
+import 'package:pokemon/pokemon.dart';
 
 class PokeNewView extends StatefulWidget {
   @override
@@ -75,19 +76,29 @@ class _PokeNewViewState extends State<PokeNewView> {
                                   Text('Abilities',
                                       style:
                                           Theme.of(context).textTheme.subtitle),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      CircularContainer(
+                                  Container(
+                                    height: 95,
+                                    width: 130,
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.all(0),
+                                      itemCount: snapshot.data.abilities.length,
+                                      itemBuilder: (context, index) =>
+                                          CircularContainer(
                                         text:
-                                            '${snapshot.data.ability1.toString()[0].toUpperCase() + snapshot.data.ability1.toString().substring(1)}',
+                                            '${snapshot.data.abilities[index].name.toString()[0].toUpperCase() + snapshot.data.abilities[index].name.toString().substring(1)}',
                                       ),
-                                      CircularContainer(
-                                          text:
-                                              '${snapshot.data.ability2.toString()[0].toUpperCase() + snapshot.data.ability2.toString().substring(1)}'),
-                                    ],
+                                    ),
                                   ),
+                                  //Row(
+                                  //  mainAxisAlignment:
+                                  //      MainAxisAlignment.spaceEvenly,
+                                  //  children: snapshot.data.abilities
+                                  //      .map(
+                                  //        (index) => CircularContainer(
+                                  //            text: '${index.name}'),
+                                  //      )
+                                  //      .toList(),
+                                  //),
                                   ElevatedButton(
                                     style: ButtonStyle(
                                       backgroundColor:

@@ -7,6 +7,7 @@ class Pokemon {
   String type;
   String ability1;
   String ability2;
+  List<Ability> abilities;
 
   Pokemon.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -15,7 +16,22 @@ class Pokemon {
     height = json['height'];
     id = json['id'];
     type = json['types'][0]['type']['name'];
-    ability1 = json['abilities'][0]['ability']['name'];
-    ability2 = json['abilities'][1]['ability']['name'];
+
+    var listAbilities = json['abilities'] as List;
+    abilities =
+        listAbilities.map((e) => Ability.fromJson(e['ability'])).toList();
+
+    print(listAbilities);
+    print(abilities);
+  }
+}
+
+class Ability {
+  String name;
+  String url;
+
+  Ability.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    url = json['url'];
   }
 }
