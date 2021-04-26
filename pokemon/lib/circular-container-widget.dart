@@ -27,6 +27,7 @@ class CircularContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 4),
       alignment: Alignment.center,
       height: size.height * 0.04,
       decoration: BoxDecoration(
