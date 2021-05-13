@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon/circular-container-widget.dart';
-import 'package:pokemon/poke-controller.dart';
+import 'package:pokemon/poke-viewModel.dart';
 import 'package:pokemon/pokemon.dart';
 
 class PokeNewView extends StatefulWidget {
@@ -9,7 +9,13 @@ class PokeNewView extends StatefulWidget {
 }
 
 class _PokeNewViewState extends State<PokeNewView> {
-  final controller = PokeController();
+  final viewModel = PokeViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel.loadPokemon();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +30,8 @@ class _PokeNewViewState extends State<PokeNewView> {
           child: Center(
             child: Container(
               height: size.height * 0.7,
-              child: FutureBuilder(
-                future: controller.pokemon,
+              child: StreamBuilder(
+                stream: viewModel.pokemonStream.stream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -108,7 +114,7 @@ class _PokeNewViewState extends State<PokeNewView> {
                                     ),
                                     onPressed: () {
                                       setState(() {
-                                        controller.loadPokemon();
+                                        viewModel.loadPokemon();
                                       });
                                     },
                                     child: Padding(
@@ -156,9 +162,7 @@ class _PokeNewViewState extends State<PokeNewView> {
                               ),
                             ),
                             onPressed: () {
-                              setState(() {
-                                controller.loadPokemon();
-                              });
+                              viewModel.loadPokemon();
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -177,9 +181,7 @@ class _PokeNewViewState extends State<PokeNewView> {
                   }
                   return TextButton(
                     onPressed: () {
-                      setState(() {
-                        controller.loadPokemon();
-                      });
+                      viewModel.loadPokemon();
                     },
                     child: Text(
                       'Load Pokemon',

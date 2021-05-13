@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon/poke-view.dart';
 import 'package:pokemon/poke-new-view.dart';
 
 void main() {
