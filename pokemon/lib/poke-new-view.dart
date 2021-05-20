@@ -33,7 +33,7 @@ class _PokeNewViewState extends State<PokeNewView> {
               child: StreamBuilder(
                 stream: viewModel.pokemonStream.stream,
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+                  if (snapshot.connectionState != ConnectionState.active) {
                     return Center(
                       child: CircularProgressIndicator(
                         backgroundColor: Colors.white,

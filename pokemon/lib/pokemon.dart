@@ -5,9 +5,9 @@ class Pokemon {
   int height;
   int id;
   String type;
-  String ability1;
-  String ability2;
   List<Ability> abilities;
+
+  Pokemon({this.name, this.imageUrl, this.abilities});
 
   Pokemon.fromJson(Map<String, dynamic> json) {
     name = json['name'];
