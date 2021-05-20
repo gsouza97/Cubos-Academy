@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:pokemon/pokemon.dart';
 
 class API {
+  const API();
   final _url = 'pokeapi.co';
 
   Future<Pokemon> fetchPokemon(int number) async {
