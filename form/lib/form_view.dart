@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:form/form_controller.dart';
 
-class FormScreen extends StatefulWidget {
+class FormView extends StatefulWidget {
   @override
-  _FormScreenState createState() => _FormScreenState();
+  _FormViewState createState() => _FormViewState();
 }
 
-class _FormScreenState extends State<FormScreen> {
+class _FormViewState extends State<FormView> {
   final _formKey = GlobalKey<FormState>();
-  String _name;
-  String _surname;
+  final controller = FormController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,11 @@ class _FormScreenState extends State<FormScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    FutureBuilder(
+                        future: controller.fullName,
+                        builder: (context, snapshot) {
+                          return Text('Bem vindo de volta ${snapshot.data}');
+                        }),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Name',
@@ -49,7 +54,7 @@ class _FormScreenState extends State<FormScreen> {
                       },
                       textInputAction: TextInputAction.next,
                       onChanged: (value) {
-                        _name = value;
+                        controller.updateName(value);
                       },
                     ),
                     TextFormField(
@@ -66,7 +71,7 @@ class _FormScreenState extends State<FormScreen> {
                         return null;
                       },
                       onChanged: (value) {
-                        _surname = value;
+                        controller.updateSurname(value);
                       },
                       onFieldSubmitted: (value) {
                         final isValid = _formKey.currentState
@@ -76,7 +81,20 @@ class _FormScreenState extends State<FormScreen> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text('Welcome $_name $_surname'),
+                                title: Text(
+                                  'Welcome ${controller.name} ${controller.surname}',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        controller.saveUser();
+                                        Navigator.of(context).pop();
+                                      });
+                                    },
+                                    child: Text('Salvar'),
+                                  ),
+                                ],
                               );
                             },
                           );
@@ -92,7 +110,20 @@ class _FormScreenState extends State<FormScreen> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text('Welcome $_name $_surname'),
+                                title: Text(
+                                  'Welcome ${controller.name} ${controller.surname}',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        controller.saveUser();
+                                        Navigator.of(context).pop();
+                                      });
+                                    },
+                                    child: Text('Salvar'),
+                                  ),
+                                ],
                               );
                             },
                           );
