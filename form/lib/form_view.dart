@@ -35,11 +35,13 @@ class _FormViewState extends State<FormView> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     FutureBuilder(
-                        future: controller.fullName,
-                        builder: (context, snapshot) {
-                          return Text('Welcome back ${snapshot.data}');
-                        }),
+                      future: controller.fullName,
+                      builder: (context, snapshot) {
+                        return Text('Welcome back ${snapshot.data}');
+                      },
+                    ),
                     TextFormField(
+                      initialValue: controller.name,
                       decoration: InputDecoration(
                         labelText: 'Name',
                         hintText: 'Name',
@@ -54,10 +56,14 @@ class _FormViewState extends State<FormView> {
                       },
                       textInputAction: TextInputAction.next,
                       onChanged: (value) {
-                        controller.updateName(value);
+                        setState(() {
+                          controller.updateName(value);
+                          controller.saveUser();
+                        });
                       },
                     ),
                     TextFormField(
+                      initialValue: controller.surname,
                       decoration: InputDecoration(
                         labelText: 'Last Name',
                         hintText: 'Last Name',
@@ -71,7 +77,10 @@ class _FormViewState extends State<FormView> {
                         return null;
                       },
                       onChanged: (value) {
-                        controller.updateSurname(value);
+                        setState(() {
+                          controller.updateSurname(value);
+                          controller.saveUser();
+                        });
                       },
                       onFieldSubmitted: (value) {
                         final isValid = _formKey.currentState

@@ -8,7 +8,7 @@ class FormModel {
   final InternalStorageAdapter internalStorage;
 
   FormModel({InternalStorageAdapter internalStorageAdapter})
-      : internalStorage = internalStorageAdapter ?? SecureStorageAdapter();
+      : internalStorage = internalStorageAdapter ?? SharedPreferencesAdapter();
 
   void save() {
     if (name != null && surname != null) {
