@@ -1,6 +1,7 @@
 import 'package:form/internal_storage.dart';
 import 'package:form/secure_storage_adapter.dart';
 import 'package:form/shared_preferences_adapter.dart';
+import 'package:form/sql_adapter.dart';
 
 class FormModel {
   String name;
@@ -8,7 +9,7 @@ class FormModel {
   final InternalStorageAdapter internalStorage;
 
   FormModel({InternalStorageAdapter internalStorageAdapter})
-      : internalStorage = internalStorageAdapter ?? SharedPreferencesAdapter();
+      : internalStorage = internalStorageAdapter ?? SQLAdapter();
 
   void save() {
     if (name != null && surname != null) {
