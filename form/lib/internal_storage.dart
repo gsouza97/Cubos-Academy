@@ -1,4 +1,7 @@
+import 'package:form/user.dart';
+
 abstract class InternalStorageAdapter {
   void saveUser(String name, String surname);
-  Future<String> getFullName();
+  Future<User> getUser();
+  void deleteUser(User user);
 }

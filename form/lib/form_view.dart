@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:form/form_model.dart';
 import 'package:form/form_controller.dart';
 
 class FormView extends StatefulWidget {
@@ -31,117 +32,137 @@ class _FormViewState extends State<FormView> {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    FutureBuilder(
-                      future: controller.fullName,
-                      builder: (context, snapshot) {
-                        return Text('Welcome back ${snapshot.data}');
-                      },
-                    ),
-                    TextFormField(
-                      initialValue: controller.name,
-                      decoration: InputDecoration(
-                        labelText: 'Name',
-                        hintText: 'Name',
-                      ),
-                      keyboardType: TextInputType.name,
-                      textCapitalization: TextCapitalization.words,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please fill in this field with your name';
-                        }
-                        return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      onChanged: (value) {
-                        setState(() {
-                          controller.updateName(value);
-                          controller.saveUser();
-                        });
-                      },
-                    ),
-                    TextFormField(
-                      initialValue: controller.surname,
-                      decoration: InputDecoration(
-                        labelText: 'Last Name',
-                        hintText: 'Last Name',
-                      ),
-                      keyboardType: TextInputType.name,
-                      textCapitalization: TextCapitalization.words,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please fill in this field with your last name';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          controller.updateSurname(value);
-                          controller.saveUser();
-                        });
-                      },
-                      onFieldSubmitted: (value) {
-                        final isValid = _formKey.currentState
-                            .validate(); // Valida os campos do formulário
-                        if (isValid) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(
-                                  'Welcome ${controller.name} ${controller.surname}',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        controller.saveUser();
-                                        Navigator.of(context).pop();
-                                      });
-                                    },
-                                    child: Text('Salvar'),
-                                  ),
-                                ],
+                child: FutureBuilder(
+                  future: controller.user,
+                  builder: (context, snapshot) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        snapshot.data != null
+                            ? Text(
+                                'Welcome back #${snapshot.data.rowid} ${snapshot.data.name} ${snapshot.data.surname}')
+                            : Container(),
+                        TextFormField(
+                          //initialValue: controller.user.name,
+                          decoration: InputDecoration(
+                            labelText: 'Name',
+                            hintText: 'Name',
+                          ),
+                          keyboardType: TextInputType.name,
+                          textCapitalization: TextCapitalization.words,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Please fill in this field with your name';
+                            }
+                            return null;
+                          },
+                          textInputAction: TextInputAction.next,
+                          onChanged: (value) {
+                            controller.updateName(value);
+                          },
+                        ),
+                        TextFormField(
+                          //initialValue: controller.user.surname,
+                          decoration: InputDecoration(
+                            labelText: 'Last Name',
+                            hintText: 'Last Name',
+                          ),
+                          keyboardType: TextInputType.name,
+                          textCapitalization: TextCapitalization.words,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Please fill in this field with your last name';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            controller.updateSurname(value);
+                          },
+                          onFieldSubmitted: (value) {
+                            final isValid = _formKey.currentState
+                                .validate(); // Valida os campos do formulário
+                            if (isValid) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Welcome ${controller.name} ${controller.surname}',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            controller.saveUser();
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                        child: Text('Salvar'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-                            },
-                          );
-                        }
-                      },
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        final isValid = _formKey.currentState
-                            .validate(); // Valida os campos do formulário
-                        if (isValid) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(
-                                  'Welcome ${controller.name} ${controller.surname}',
+                            }
+                          },
+                        ),
+                        SizedBox(height: size.height * 0.02),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    controller.deleteUser(snapshot.data);
+                                  });
+                                },
+                                icon: Icon(Icons.delete),
+                                label: Text('Delete'),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.red),
                                 ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        controller.saveUser();
-                                        Navigator.of(context).pop();
-                                      });
-                                    },
-                                    child: Text('Salvar'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      },
-                      icon: Icon(Icons.check),
-                      label: Text('Check'),
-                    )
-                  ],
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  final isValid = _formKey.currentState
+                                      .validate(); // Valida os campos do formulário
+                                  if (isValid) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Welcome ${controller.name} ${controller.surname}',
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  controller.saveUser();
+                                                  Navigator.of(context).pop();
+                                                });
+                                              },
+                                              child: Text('Salvar'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                },
+                                icon: Icon(Icons.check),
+                                label: Text('Check'),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    );
+                  },
                 ),
               ),
             ),

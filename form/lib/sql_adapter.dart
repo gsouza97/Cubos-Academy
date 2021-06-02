@@ -1,4 +1,5 @@
 import 'package:form/internal_storage.dart';
+import 'package:form/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -37,24 +38,22 @@ class SQLAdapter extends InternalStorageAdapter {
 
   // Função para pegar o nome completo
   @override
-  Future<String> getFullName() async {
+  Future<User> getUser() async {
     final Database db = await database;
 
     var response = await db.query(
       'Users',
       columns: ['rowid', 'name', 'surname'],
-      where: 'name = ?',
-      whereArgs: ['Gabriel']
+      // where: 'rowid = ?',
+      // whereArgs: ['2']
     );
 
     if (response.isNotEmpty) {
-      final name = response.last['name'];
-      final surname = response.last['surname'];
-      final rowid = response.last['rowid'];
-
-      return '$rowid $name $surname';
+      final User user = User.fromMap(response.last);
+      print(user.name);
+      return user;
     } else {
-      return 'Não encontrado';
+      return null;
     }
   }
 
@@ -65,5 +64,15 @@ class SQLAdapter extends InternalStorageAdapter {
 
     await db.insert('Users', {'name': name, 'surname': surname});
     print('Usuário salvo no DB');
+    print('$name $surname');
+  }
+
+  // Função para deletar o usuário
+  @override
+  void deleteUser(User user) async {
+    final Database db = await database;
+
+    await db.delete('Users', where: 'rowid = ?', whereArgs: [user.rowid]);
+    print('Usuário deletado');
   }
 }
