@@ -20,7 +20,7 @@ class _PictureViewState extends State<PictureView> {
 
     final result = Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => CameraView(),
+        builder: (context) => CameraView(camera: camera,),
       ),
     );
   }
