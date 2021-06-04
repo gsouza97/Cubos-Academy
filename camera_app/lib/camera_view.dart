@@ -26,6 +26,15 @@ class _CameraViewState extends State<CameraView> {
     _initCameraFuture = _cameraController.initialize();
   }
 
+  // Função para tirar foto.
+  // Espera a camera inicializar, e então tira foto.
+  // Dá um pop e retorna a foto tirada.
+  _takePicture(BuildContext context) async {
+    await _initCameraFuture;
+    final picture = await _cameraController.takePicture();
+    Navigator.of(context).pop(picture);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -42,6 +51,15 @@ class _CameraViewState extends State<CameraView> {
                 );
               }
             },
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: FloatingActionButton(
+              onPressed: () {
+                _takePicture(context);
+              },
+              child: Icon(Icons.camera),
+            ),
           )
         ],
       ),
