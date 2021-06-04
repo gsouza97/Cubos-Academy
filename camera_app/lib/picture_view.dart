@@ -22,7 +22,9 @@ class _PictureViewState extends State<PictureView> {
   // Pega a foto que foi tirada e salva em _picture. SetState pra exibir
   _showCamera() async {
     final cameras = await availableCameras();
-    final camera = cameras.first;
+    // Pegando a camera frontal
+    final camera = cameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front);
+    //final camera = cameras.first;
 
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
