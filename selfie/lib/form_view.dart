@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:selfie/camera_view.dart';
+import 'package:selfie/form_viewModel.dart';
 
 class FormView extends StatefulWidget {
   @override
@@ -9,24 +10,7 @@ class FormView extends StatefulWidget {
 
 class _FormViewState extends State<FormView> {
   final _formKey = GlobalKey<FormState>();
-
-  String name;
-  String surname;
-
-  _showCamera() async {
-    final cameras = await availableCameras();
-    final camera = cameras.firstWhere(
-        (element) => element.lensDirection == CameraLensDirection.front);
-    final result = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => CameraView(
-          camera: camera,
-          name: name,
-          surname: surname,
-        ),
-      ),
-    );
-  }
+  final viewModel = FormViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +50,7 @@ class _FormViewState extends State<FormView> {
                       },
                       textInputAction: TextInputAction.next,
                       onChanged: (value) {
-                        name = value;
+                        viewModel.updateName(value);
                       },
                     ),
                     TextFormField(
@@ -83,25 +67,26 @@ class _FormViewState extends State<FormView> {
                         return null;
                       },
                       onChanged: (value) {
-                        surname = value;
+                        viewModel.updateSurname(value);
                       },
                       onFieldSubmitted: (value) {
                         final isValid = _formKey.currentState
                             .validate(); // Valida os campos do formulário
                         if (isValid) {
-                          _showCamera();
+                          viewModel.showCamera(context);
                         }
                       },
                     ),
                     ElevatedButton(
-                        onPressed: () {
-                          final isValid = _formKey.currentState
-                              .validate(); // Valida os campos do formulário
-                          if (isValid) {
-                            _showCamera();
-                          }
-                        },
-                        child: Text('Next'))
+                      onPressed: () {
+                        final isValid = _formKey.currentState
+                            .validate(); // Valida os campos do formulário
+                        if (isValid) {
+                          viewModel.showCamera(context);
+                        }
+                      },
+                      child: Text('Next'),
+                    )
                   ],
                 ),
               ),

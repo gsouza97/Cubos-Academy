@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:selfie/camera_viewModel.dart';
 import 'package:selfie/profile_view.dart';
 
 class CameraView extends StatefulWidget {
@@ -15,28 +16,13 @@ class CameraView extends StatefulWidget {
 }
 
 class _CameraViewState extends State<CameraView> {
-  CameraController _cameraController;
-  Future<void> _initCamera;
+  final viewModel = CameraViewModel();
 
   @override
   void initState() {
     super.initState();
-    _cameraController = CameraController(widget.camera, ResolutionPreset.max);
-    _initCamera = _cameraController.initialize();
-  }
-
-  _takePicture(BuildContext context) async {
-    await _initCamera;
-    final picture = await _cameraController.takePicture();
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => ProfileView(
-          picture: picture,
-          name: widget.name,
-          surname: widget.surname,
-        ),
-      ),
-    );
+    viewModel.selectCamera(widget.camera);
+    viewModel.initializeCamera();
   }
 
   @override
@@ -45,10 +31,10 @@ class _CameraViewState extends State<CameraView> {
       child: Stack(
         children: [
           FutureBuilder(
-            future: _initCamera,
+            future: viewModel.initCamera,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return CameraPreview(_cameraController);
+                return CameraPreview(viewModel.cameraController);
               } else {
                 return Center(
                   child: CircularProgressIndicator(),
@@ -60,7 +46,7 @@ class _CameraViewState extends State<CameraView> {
             alignment: Alignment.bottomCenter,
             child: FloatingActionButton(
               onPressed: () {
-                _takePicture(context);
+                viewModel.takePicture(context, widget.name, widget.surname);
               },
               child: Icon(Icons.camera),
             ),
